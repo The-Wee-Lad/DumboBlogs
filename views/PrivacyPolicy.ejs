@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("./partials/head.ejs") %>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        p {
+            color: #555;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include("./partials/navbar.ejs") %>
+    <div class="container">
+        <h1>Privacy Policy</h1>
+
+        <div class="section">
+            <h2>1. Authentication Data Protection</h2>
+            <p>We do not sell, monitor, analyze, or track authentication data. Authentication details include:</p>
+            <ul>
+                <li>Username</li>
+                <li>Password</li>
+                <li>Email</li>
+                <li>Full Name</li>
+                <li>Avatar</li>
+                <li>Cover Image</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>2. Data Collection & Usage</h2>
+            <p>Any data not explicitly listed above is not considered private or subject to protection under this
+                policy. This includes, but is not limited to:</p>
+            <ul>
+                <li>Articles</li>
+                <li>User interactions within the platform</li>
+            </ul>
+            <p>Such data may be monitored, analyzed, sold, or tracked in the present or in the future.</p>
+        </div>
+
+        <div class="section">
+            <h2>3. Publicly Visible Information & User Caution</h2>
+            <p>Since author names and avatars are publicly visible, we strongly advise users to:</p>
+            <ul>
+                <li>Avoid using real names or usernames that resemble their real identity.</li>
+                <li>Use avatars that do not contain identifiable personal information.</li>
+            </ul>
+            <p>Public visibility means that individuals who disagree with your views may attempt to retaliate in real
+                life. Protecting your privacy is your responsibility.</p>
+        </div>
+
+        <div class="section">
+            <h2>4. Disclaimer</h2>
+            <p>We are not liable for the public exposure of authentication data such as avatars and full names, as they
+                are explicitly displayed on the platform.</p>
+        </div>
+    </div>
+    <%- include("./partials/footer.ejs") %>
+</body>
+
+</html>

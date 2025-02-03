@@ -1,0 +1,29 @@
+.wrapper{
+    border-radius: 1em;
+    background-color: rgb(216, 254, 241);
+    padding: 1em;
+    max-width: 40vw;
+    text-align: center;
+    margin-left:30vw;
+    margin-top: 10vh;
+
+}
+
+.text-content{
+    border-radius: 1em;
+    background-color: rgb(216, 254, 241);
+    padding: 0.5em;
+    text-align: center;
+    margin-top: 0.5em;
+}
+
+@media (max-width: 800px) {
+    .wrapper {
+      max-width: 60vw;
+      margin: auto;
+      margin-top: 10vh;
+    }
+    .heading {
+      font-size: 1.8rem;
+    }
+  }
