@@ -10,11 +10,15 @@ footer {
     margin-bottom: 0px;
 }
 
+.footer-links, .footer-contact, .footer-social{
+    text-align: center;
+}
+
 /* Footer Container */
 .footer-container {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; 
+    align-items: center; 
     gap: 10px;
     flex-wrap: wrap;
     flex-grow: 1; 
@@ -64,6 +68,7 @@ footer ul li a:hover {
     margin-top: 5px;
     text-align: center;
     padding-bottom: 0px;
+    
 }
 
 
