@@ -6,6 +6,11 @@ import path from "path";
 
 const app = express();
 
+const cacheOptions = {
+    immutable:true,
+    maxAge:"1d",
+}
+
 app.set('view engine','ejs');
 
 
@@ -15,9 +20,8 @@ app.use(cors({
 }));
 
 
+app.use(express.json({limit: "16kb"},cacheOptions));
 
-
-app.use(express.json({limit: "16kb"}));
 app.use(express.urlencoded({extended : true, limit : "16kb"}));
 app.use(express.static(path.resolve()+"/src/public"));
 app.use(cookieParser());
