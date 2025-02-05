@@ -10,6 +10,7 @@ const createShow = asyncHandler(async(req, res) => {
 });
 
 const createArticle = asyncHandler(async (req, res) => {
+    
     const {formData} = req.body; 
     const article = await Articles.create({
         title: formData.title,

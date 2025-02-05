@@ -1,5 +1,3 @@
-import axios from "axios";
-
 const btnPrimary = document.querySelector(".btn-primary");
 btnPrimary.textContent = "Create";
 const maxTitle = 50,
@@ -24,12 +22,14 @@ const stateMessage = (error = false,message, reset = false) => {
 const makeCreateRequest = async (formData) => {
     try {
         const response = await axios.post("/api/v1/articles/create",{formData});
+        console.log(response);
         stateMessage(false,"Post Created Successfully ....redirecting");
         setTimeout(() => {
             window.location.href = "/"
         }, 1000);
     } catch (error) {
         if(error.status < 500){
+            console.log(error);
             if(error.response.data.code == 709){
                 await axios.post("/api/v1/user/refreshAccessToken")
                 .then(()=>{
@@ -37,13 +37,16 @@ const makeCreateRequest = async (formData) => {
                 })
                 .catch((err) => {
                     if(err.status < 500){
-                        stateMessage(true,error.response.data.message);
+                        console.log("Refresh Token Corrupt Error");
+                        stateMessage(true,error.response.data.message+"....Redirecting to login Page");
                     }else{
                         window.location.href = "/error"
                     }
                 })
             } else{
-                stateMessage(true,error.response.data.message);
+                console.log("Access Token Corrupt Error");
+                
+                stateMessage(true,error.response.data.message||error.message);
             }
         }else {
             window.location.href = "/error"

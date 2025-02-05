@@ -1,13 +1,14 @@
 import { Router } from "express";
-import { createShow } from "../controllers/articles.controller.js"
+import { createArticle, createShow } from "../controllers/articles.controller.js"
 import { verifyJWT } from "../middlewares/auth.middlewares.js";
 const router = Router();
 
-router.use(verifyJWT);
 
-router.route("/create")
-.get(createShow)
-.post();
+router.route("/create").get(createShow);
+
+router.use(verifyJWT);
+router.route("/create").post(createArticle);
+
 
 router.route("/update/:id")
 .get()
