@@ -4,8 +4,8 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
 
 const cookieOptions = {
-    httpOnly:true,
-    secure:true
+    httpOnly:false,
+    secure:false,
 }
 
 const generateAccessAndRefreshToken = async(userid) => {
@@ -18,27 +18,35 @@ const generateAccessAndRefreshToken = async(userid) => {
         return { accessToken, refreshToken};
 
     } catch (error) {
-        throw Error("Couldn't Generate refereshToken and accessToken");
+        throw Error(`Couldn't Generate refereshToken and accessToken : ${error}`);
     }
 };
 
-const refreshAccessToken = async(req, res) => {
+const refreshAccessToken = asyncHandler(async(req, res) => {
     try {
         const receivedRefreshToken = req.cookies.refreshToken || req.body.refreshToken ;
-        const decodedRefreshToken = jwt.verify(receivedRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+        let decodedRefreshToken;
+        try {
+            decodedRefreshToken = jwt.verify(receivedRefreshToken, process.env.REFRESH_TOKEN_SECRET);    
+        } catch (error) {
+            if(error.name == "TokenExpiredError"){
+                res.status(401).json(new ApiResponse(401, {}, "Expired Refresh Token", 718));
+                throw new Error("Expired Refresh Token [Refresh Access Token]");
+            }
+        }
         const userid = decodedRefreshToken?._id;
         const user = await Users.findById(userid);
     
         if(!user){
             res.status(401).json(new ApiResponse(401, {}, "Invalid Refresh Token", 718));
-            throw new Error("Invalid Refresh Token");
+            throw new Error("Invalid Refresh Token [Refresh Access Token]");
         }
     
         const storedRefreshToken = user?.refreshToken;
     
         if(storedRefreshToken !==  receivedRefreshToken){
             res.status(401).json(new ApiResponse(401, {}, "Invalid Refresh Token", 718));
-            throw new Error("1 Refresh Token Expired");
+            throw new Error("Refresh Token Expired [Refresh Access Token]");
         }
     
         const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user?._id);        
@@ -49,9 +57,9 @@ const refreshAccessToken = async(req, res) => {
         .cookie("refreshToken",refreshToken)
         .json(new ApiResponse(200,{accessToken, refreshToken}, "new accessToken generated successfully"));
     } catch (error) {
-        throw error;
+        throw new Error(`couldn't refresh Access Token [Refresh Access Token] ${error}`);
     }
-}
+});
 
 const registerUser = asyncHandler(async(req, res) => {
     const {username, email, password} = req.body;
@@ -108,7 +116,7 @@ const loginUser = asyncHandler(async (req,res) => {
         .status(200)
         .cookie("accessToken",accessToken,cookieOptions)
         .cookie("refreshToken",refreshToken,cookieOptions)
-        .json(new ApiResponse(200,{accessToken, refreshToken}, "Successfully Logged In"));
+        .json(new ApiResponse(200,{user:user.isSelected("-password"),accessToken, refreshToken}, "Successfully Logged In"));
 })
 
 const isUserLoggedIn = asyncHandler(async (req, res) => {
@@ -125,17 +133,17 @@ const isUserLoggedIn = asyncHandler(async (req, res) => {
         // console.log(error);
         if(error.name == "TokenExpiredError"){
             res.status(401).json(new ApiResponse(401, {isUserLoggedIn:false}, "Token Expired", 709));
-            throw new Error("Token Expired");
+            throw new Error("access Token Expired [is User logged IN]");
         } else{
             res.status(401).json(new ApiResponse(401,{isUserLoggedIn:false}, "Invalid Token", 708));
-            throw new Error("Invalid Token");
+            throw new Error("Invalid Token [is User logged IN]");
         }
     }
     
     const user = await Users.findById(decodedToken?._id);
     if(!user){
-        return res.status(401).json(new ApiResponse(401,{isUserLoggedIn:false}, "Invalid Token", 708))
-        throw new Error("Invalid Token");
+        res.status(401).json(new ApiResponse(401,{isUserLoggedIn:false}, "Invalid Token", 708));
+        throw new Error("Invalid Token [is User logged IN]");
     }
     return res.status(200).json(new ApiResponse(200,{isUserLoggedIn:true}, "User Is Logged In", 200))
 });
@@ -156,11 +164,17 @@ const logoutUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200,{},"Logged out Successfully"));
 }) 
 
+const getCurrentUser = asyncHandler(async (req, res) => {
+    const user = Users.findById(req?._id).select("-password -refreshToken");
+    res.status(200).json(new ApiResponse(200, user, "User Fetched!!", 200));
+});
+
 export {
     refreshAccessToken,
     generateAccessAndRefreshToken,
     registerUser,
     loginUser,
     isUserLoggedIn,
-    logoutUser
+    logoutUser,
+    getCurrentUser
 }

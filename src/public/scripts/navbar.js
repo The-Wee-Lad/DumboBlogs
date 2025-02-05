@@ -1,3 +1,4 @@
+
 function toggleMenu() {
     const elem = document.querySelector('.nav-links');
     elem.classList.toggle('active');
@@ -9,13 +10,11 @@ function toggleMenu() {
 }
 
 let loginStatus;
-async function checkLogin() {
+async function checkLogin() {    
     try {
         const response = await axios.get('/api/v1/user/isUserLoggedIn');
-        // console.log(response.data);
         loginStatus = response.data.data.isUserLoggedIn;    
     } catch (error) {
-        // console.log("Error in check login :",error);
         if(error.status<500){
             if(error.response.data.code == 709){
                 console.log("Refreshing Token");
@@ -26,7 +25,6 @@ async function checkLogin() {
                     if(error.status < 500){
                         loginStatus = false;
                     } else{
-                        // throw error;
                         setTimeout(() => {
                             window.location.href = "/error";                
                         }, 1000);
@@ -36,6 +34,8 @@ async function checkLogin() {
                 loginStatus = false;
             }
         } else{
+            console.log("here too");
+            
             setTimeout(() => {
                 window.location.href = "/error";                
             }, 1000);
@@ -75,14 +75,16 @@ const logoutHandler = async (event) => {
             if(error.response.data.code == 709){
                 console.log("Refreshing Token in logoutHandler");
                 await axios.post("/api/v1/user/refreshAccessToken")
-                .then((res, rej)=>{logoutHandler();})
+                .then((res)=>{logoutHandler();})
                 .catch((err)=>{
+                    console.log("Refresh has failed : error ",err);
                     if(err.status<500){
                         loginStatus = false;
+                        window.location.href = "/";
                     }else {
-                        console.log("Inside");
-                        throw error
-                        // window.location.href = "/error";
+                        console.log("Catastrophic Error Occurred");
+                        // throw error
+                        window.location.href = "/error";
                     }
                 });
             }
@@ -100,4 +102,6 @@ document.body.addEventListener('click',(event)=>{
     if(!elem.contains(event.target) && links.classList.contains('active'))
         toggleMenu();
 });
-checkLogin();
+
+if((window.location.href).split("/").splice(-1,1) != "error")
+    checkLogin();

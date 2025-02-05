@@ -10,7 +10,7 @@ const verifyJWT = asyncHandler( async (req, res, next) => {
     
         if(!receivedAccessToken){
             res.status(401).json(new ApiResponse(401, {}, "No Token Found", 708));
-            throw new Error("No Token Found");
+            throw new Error("No Token Found [Auth Middleware]");
         }
         
         let decodedToken;
@@ -19,10 +19,10 @@ const verifyJWT = asyncHandler( async (req, res, next) => {
         } catch (error) {
             if(error.name == 'TokenExpiredError'){
                 res.status(401).json(new ApiResponse(401, {}, "Token Expired", 709));
-                throw error;
+                throw new Error("access Token Expired [Auth Middleware]");
             }
             else{
-                throw new Error("Invalid Token");
+                throw new Error("Invalid Token [Auth Middleware]",error);
             }
         }
         // console.log(decodedToken);
@@ -36,7 +36,7 @@ const verifyJWT = asyncHandler( async (req, res, next) => {
         next();
 
     } catch (error) {
-        throw error;
+        throw new Error(`Error : [Auth Middleware] : ${error}`);
     }
 }
 );

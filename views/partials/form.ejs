@@ -1,0 +1,33 @@
+<form action="" method="POST">
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" class="form-control"  placeholder="Enter title" required>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" class="form-control"  placeholder="Enter description"  required>
+    </div>
+
+    <div class="form-group">
+        <label for="markdown">Markdown Content:</label>
+        <textarea id="markdown" name="markdown" class="form-control" rows="6" placeholder="Enter markdown content" required></textarea>
+    </div>
+
+    <div class="form-group clickable">
+        <button type="button" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-secondary" onclick="window.history.back();">Cancel</button>
+        <div class="checkbox">
+            <label for="isPublic" id="isPublicLabel" for = "isPublic" >IsPublic</label>
+            <input type="checkbox" id="isPublic" name="isPublic" value="isPublic" checked>
+        </div>
+    </div>
+</form>
+<script>
+    document.addEventListener("input", function(event) {
+        if (event.target.tagName.toLowerCase() === 'textarea') {
+            event.target.style.height = 'auto';
+            event.target.style.height = (event.target.scrollHeight) + 'px'; 
+        }
+    });
+</script>

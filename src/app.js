@@ -9,6 +9,7 @@ const app = express();
 const cacheOptions = {
     immutable:true,
     maxAge:"1d",
+    etag:true,
 }
 
 app.set('view engine','ejs');
@@ -57,7 +58,9 @@ app.get('/privacyPolicy',(req ,res )=> {
     res.redirect("/api/v1/home/privacyPolicy");
 });
 
-app.use('/articles', articleRouter);
+
+
+app.use('/api/v1/articles', articleRouter);
 
 app.get('/error',(req,res)=>{
     res.render("ErrorPage",{

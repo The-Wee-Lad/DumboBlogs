@@ -33,7 +33,7 @@ const loginButton = document.querySelector("#submit");
                 stateMessage(false, response.data.message+"....redirecting")
                 setTimeout(() => {
                         window.location.href = "/";
-                    }, 2000);
+                    }, 1500);
                 // console.log(response.data.data);
             } catch (error) {
                 // console.log(error);
