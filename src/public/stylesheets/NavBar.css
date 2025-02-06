@@ -1,5 +1,6 @@
         body { 
-            font-family: Arial, sans-serif; margin: 0; 
+            font-family: Arial, sans-serif; margin: 0;
+            padding: 0; 
         }
         .navbar {  display :flex; justify-content: space-between; align-items: center; background-color: azure; padding: 15px 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); position: sticky; top: 0px;
             z-index: 100;

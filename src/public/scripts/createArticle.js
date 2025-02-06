@@ -38,7 +38,7 @@ const makeCreateRequest = async (formData) => {
                 .catch((err) => {
                     if(err.status < 500){
                         console.log("Refresh Token Corrupt Error");
-                        stateMessage(true,error.response.data.message+"....Redirecting to login Page");
+                        stateMessage(true,"Your session expired. Please log in again to continue.");
                     }else{
                         window.location.href = "/error"
                     }
@@ -89,4 +89,6 @@ const createPost = async (event) => {
 }
 
 btnPrimary.addEventListener('click',createPost);
-
+    window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+});

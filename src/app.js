@@ -72,6 +72,16 @@ app.get('/error',(req,res)=>{
     })
 })
 
+app.get("/pageNotFound/:message",(req,res) => {
+    const message = req.params.message;
+    res.render("ErrorPage",{
+        title: "Page Not Found",
+        error: {
+            message : message
+        }
+    });
+});
+
 app.get("*",(req,res) => {
     res.render("ErrorPage",{
         title: "Page Not Found",
@@ -80,7 +90,6 @@ app.get("*",(req,res) => {
         }
     });
 });
-
 // app.use((err,req,res,next) => {
 //     res.render("ErrorPage",{
 //         title: "Page Not Found",

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("../partials/head.ejs")%>
+    <link rel="stylesheet" href="/stylesheets/showArticle.css">
+</head>
+<body>
+    <%- include("../partials/navbar.ejs");%>
+    <div class="container">
+        <div class="title">
+            <%=article.title%>
+        </div>
+        <div class="author-container">
+            <address class="author">
+                <div class="author-name"><%=article?.author?.fullname || article?.author?.username%></div>
+                <div class="lastUpdatedAt"><%=article.updatedAt.toLocaleString()%></div>
+            </address>
+        </div>
+        
+        <div class="buttons">
+            <div class="btn btn-one">Go Back</div>
+            <div class="btn btn-two">Like</div>
+            <div class="btn btn-three">Share</div>
+            <div class="btn btn-four">Update</div>
+        </div>
+        <div class="markdown"><%-article.markdown%></div>
+        <div class="share-popup">
+            <a target="_blank">
+                <div class="whatsapp con">
+                    <img src="https://cdn-icons-png.flaticon.com/128/3670/3670051.png" alt="">
+                    <div>Whatsapp</div>
+                </div>
+            </a>
+            <a target="_blank">
+                <div class="facebook con">
+                    <img src="https://cdn-icons-png.flaticon.com/128/20/20837.png" alt="">
+                    <div>Facebook</div>
+                </div>
+            </a>
+            <a target="_blank">
+                <div class="twitter con">
+                    <img src="https://cdn-icons-png.flaticon.com/128/5968/5968958.png" alt="">
+                    <div>Twitter</div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <%- include("../partials/footer.ejs");%>
+</body>
+</html>
