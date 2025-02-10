@@ -18,10 +18,11 @@ const checkLoginForCreate = async (event) => {
             axios.post("/api/v1/user/refreshAccessToken")
             .then(()=>{checkLogin();})
             .catch((err)=>{ 
-                window.location.href = "/api/v1/user/login";
+                console.log("this is done");
+                window.location.href = "/api/v1/user/login?redirect=/api/v1/articles/create";
             });
         }
-        window.location.href = "/api/v1/user/login";
+        window.location.href = "/api/v1/user/login?redirect=/api/v1/articles/create";
     })
 }
 

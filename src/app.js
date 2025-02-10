@@ -21,7 +21,7 @@ app.use(cors({
 }));
 
 
-app.use(express.json({limit: "16kb"},cacheOptions));
+app.use(express.json({limit: "100kb"},cacheOptions));
 
 app.use(express.urlencoded({extended : true, limit : "16kb"}));
 app.use(express.static(path.resolve()+"/src/public"));

@@ -84,13 +84,15 @@ const registerUser = asyncHandler(async(req, res) => {
     if(!user){
         res.status(500).json(new ApiResponse(500, {},"User Registration failed Server Error", 703));
     }
-    res.status(200).json(new ApiResponse(200, {},"User Registered Successfully" ));
+    res.status(200)
+    .set("Cache-Control","no-store, no-cache, must-revalidate, private")
+    .json(new ApiResponse(200, {},"User Registered Successfully" ));
     }
 );
 
 const loginUser = asyncHandler(async (req,res) => {
     const {usernameOrEmail, password} = req.body;
-
+    
     if(!usernameOrEmail || !password){
         return res.status(400).json(new ApiResponse(400, {},"All Fields Required", 700));
     }
@@ -116,37 +118,11 @@ const loginUser = asyncHandler(async (req,res) => {
         .status(200)
         .cookie("accessToken",accessToken,cookieOptions)
         .cookie("refreshToken",refreshToken,cookieOptions)
+        .set("Cache-Control","no-store, no-cache, must-revalidate, private")
         .json(new ApiResponse(200,{user:user.isSelected("-password"),accessToken, refreshToken}, "Successfully Logged In"));
 })
 
-const isUserLoggedIn = asyncHandler(async (req, res) => {
-    const receivedAccessToken = req.cookies?.accessToken || req.headers.authorization?.replace("Bearer","")?.trim();
-    
-    if(!receivedAccessToken){
-        return res.status(401).json(new ApiResponse(401,{isUserLoggedIn:false},"Invalid Token", 708));
-    }
 
-    let decodedToken;
-    try {
-        decodedToken = jwt.verify(receivedAccessToken,process.env.ACCESS_TOKEN_SECRET);
-    } catch (error) {
-        // console.log(error);
-        if(error.name == "TokenExpiredError"){
-            res.status(401).json(new ApiResponse(401, {isUserLoggedIn:false}, "Token Expired", 709));
-            throw new Error("access Token Expired [is User logged IN]");
-        } else{
-            res.status(401).json(new ApiResponse(401,{isUserLoggedIn:false}, "Invalid Token", 708));
-            throw new Error("Invalid Token [is User logged IN]");
-        }
-    }
-    
-    const user = await Users.findById(decodedToken?._id);
-    if(!user){
-        res.status(401).json(new ApiResponse(401,{isUserLoggedIn:false}, "Invalid Token", 708));
-        throw new Error("Invalid Token [is User logged IN]");
-    }
-    return res.status(200).json(new ApiResponse(200,{isUserLoggedIn:true}, "User Is Logged In", 200))
-});
 
 const logoutUser = asyncHandler(async (req, res) => {
     const user_id = req.user?._id;
@@ -161,12 +137,15 @@ const logoutUser = asyncHandler(async (req, res) => {
     res.status(200)
     .clearCookie("refreshToken",cookieOptions)
     .clearCookie("accessToken",cookieOptions)  
+    .set("Cache-Control","no-store, no-cache, must-revalidate, private")
     .json(new ApiResponse(200,{},"Logged out Successfully"));
 }) 
 
 const getCurrentUser = asyncHandler(async (req, res) => {
-    const user = Users.findById(req?._id).select("-password -refreshToken");
-    res.status(200).json(new ApiResponse(200, user, "User Fetched!!", 200));
+    if(!req?.user){
+        throw new Error("Verification failed yet the data passed forward to getcurrentUser");
+    }
+    res.status(200).json(new ApiResponse(200, req?.user, "User Fetched!!", 200));
 });
 
 export {
@@ -174,7 +153,7 @@ export {
     generateAccessAndRefreshToken,
     registerUser,
     loginUser,
-    isUserLoggedIn,
     logoutUser,
-    getCurrentUser
+    getCurrentUser,
+    cookieOptions
 }

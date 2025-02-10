@@ -1,3 +1,9 @@
+const logButton = document.querySelector('.login');
+const signUpButton = document.querySelector('.signup');
+const currentLocation = encodeURIComponent(window.location.pathname);
+// console.log(logButton);
+
+
 
 function toggleMenu() {
     const elem = document.querySelector('.nav-links');
@@ -9,66 +15,51 @@ function toggleMenu() {
         toggleButton.innerHTML = "&#9886;";
 }
 
-let loginStatus;
-async function checkLogin() {    
+let loginStatus=null;
+async function checkLogin() { 
     try {
         const response = await axios.get('/api/v1/user/isUserLoggedIn');
-        loginStatus = response.data.data.isUserLoggedIn;    
+        // console.log("this works",response);   
+        // console.log(response);
+        return {loginStatus : true,user:response?.data?.data};
     } catch (error) {
         if(error.status<500){
             if(error.response.data.code == 709){
-                console.log("Refreshing Token");
-                await axios.post("/api/v1/user/refreshAccessToken")
-                .then((res,rej) => {
-                    loginStatus = true;
-                }).catch((error) => {
+                console.log("Refreshing Token .....");
+                try {
+                    await axios.post("/api/v1/user/refreshAccessToken")
+                    console.log("Refreshed the Token. checking for login again....");
+                    return checkLogin();
+                } catch (error) {
                     if(error.status < 500){
-                        loginStatus = false;
+                        console.log("Refresh Token Expired or Invalid");
+                        return {loginStatus : false,user:null};
                     } else{
                         setTimeout(() => {
                             window.location.href = "/error";                
                         }, 1000);
                     }
-                })
+                }
             }else{
-                loginStatus = false;
+                return {loginStatus : false,user:null};
             }
         } else{
             console.log("here too");
-            
             setTimeout(() => {
                 window.location.href = "/error";                
             }, 1000);
         }
     }
+}
 
-    const logButton = document.querySelector('.login');
-    const signUpButton = document.querySelector('.signup');
-
-    if (loginStatus) {
-        logButton.href = "#";
-        logButton.addEventListener('click',logoutHandler);
-        logButton.textContent = "Logout";
-        logButton.style.backgroundColor = "#f48989";
-        signUpButton.style.backgroundColor = "aquamarine";
-        signUpButton.textContent = "Accounts";
-        signUpButton.href = "/";
-    } else {
-        logButton.removeEventListener('click',logoutHandler);
-        logButton.href = "/api/v1/user/login"
-        logButton.textContent = "Login";
-        logButton.style.backgroundColor = " #22cb98";
-        signUpButton.style.backgroundColor = "#324b9e";
-        signUpButton.textContent = "SignUp";
-        signUpButton.href = "/api/v1/user/register";
-    }
-};
 
 const logoutHandler = async (event) => {
     try{
         console.log("Logging Out...");
         await axios.get("/api/v1/user/logout");
-        window.location.href = "/";
+        sessionStorage.clear();
+        window.location.reload();
+        // window.location.href = "/";
     } catch(error){
         console.log("Error in logutHandler: ",error);
         if(error.status<500){
@@ -80,19 +71,48 @@ const logoutHandler = async (event) => {
                     console.log("Refresh has failed : error ",err);
                     if(err.status<500){
                         loginStatus = false;
-                        window.location.href = "/";
+                        sessionStorage.clear();
+                        window.location.reload();
                     }else {
                         console.log("Catastrophic Error Occurred");
                         // throw error
                         window.location.href = "/error";
                     }
                 });
+            }else{
+                loginStatus = false;
+                sessionStorage.clear();
+                console.log("Error ",error);
+                // window.location.reload();
+                // window.location.href = "/";
             }
         } else{
             console.log("Outside");
             // throw err
             // window.location.href = "/error"
         }
+    }
+};
+
+const setUpNavBar = async ()=>{
+    loginStatus = (await checkLogin())?.loginStatus ?? false;
+    console.log("To Display",loginStatus);
+    if (loginStatus) {
+        logButton.href = "#";
+        logButton.addEventListener('click',logoutHandler);
+        logButton.textContent = "Logout";
+        logButton.style.backgroundColor = "#f48989";
+        signUpButton.style.backgroundColor = "aquamarine";
+        signUpButton.textContent = "Accounts";
+        signUpButton.href = "/";
+    } else {
+        logButton.removeEventListener('click',logoutHandler);
+        logButton.href = `/api/v1/user/login?redirect=${currentLocation}`;
+        logButton.textContent = "Login";
+        logButton.style.backgroundColor = " #22cb98";
+        signUpButton.style.backgroundColor = "#324b9e";
+        signUpButton.textContent = "SignUp";
+        signUpButton.href = "/api/v1/user/register";
     }
 };
 
@@ -103,5 +123,7 @@ document.body.addEventListener('click',(event)=>{
         toggleMenu();
 });
 
-if((window.location.href).split("/").splice(-1,1) != "error")
-    checkLogin();
+window.addEventListener("pageshow",(event) => {
+    if((window.location.href).split("/").splice(-1,1) != "error")
+        setUpNavBar();
+});

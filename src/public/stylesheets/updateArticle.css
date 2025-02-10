@@ -54,7 +54,7 @@ input:focus, textarea:focus {
 textarea{
     height: auto;
     resize: none;
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
 }
 
 
@@ -120,9 +120,6 @@ button {
     justify-content: left;
     align-items: center;
     gap: 10px;
-    position: sticky;
-    bottom: 5px;
-    left: 0px;
 }
 
 .clickable .checkbox{
@@ -133,6 +130,7 @@ button {
     justify-content: center;
     align-items: center;
     /* padding: 10px 20px; */
+    padding-right: 5px;
 }
 #isPublicLabel{
     width: 100%;
@@ -141,11 +139,85 @@ button {
     font-size: 0.9rem;
 }
 #isPublic{
-    width: 2.2rem;
-    height: 2.2rem;
-    margin: 0px 10px;
+    width: 2rem;
+    height: 2rem;
+    margin: 0px auto;
 }
 
 .btn-tertiary{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    background-color: rgb(250, 69, 69);
+    color: #f9f9f9;
+    font-weight: bold;
+}
+
+.btn-tertiary:hover{
+    background-color: rgb(160, 36, 36);
+}
+
+.delete-popup{
+    position: fixed;
+    bottom: 0px;
+    left:0px;
+    z-index: 20000;
+    background-color: rgba(201, 79, 79, 0.797);
+    height: 100vh;
+    width: 100vw;
     display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-container{
+    height: auto;
+    width: 50vw;
+    background-color: azure;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    gap: 0.5rem;
+    border: rgb(244, 64, 64) 1pt solid;
+}
+.delete-button-grp{
+    margin-left: auto;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+.delete-message{
+    font-size: 1.1rem;
+    font-family: 'Merriweather', Georgia, serif;
+    line-height: 1.5;
+}
+.delete-button-grp{
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+    width: 25%;
+}
+.delbtn:hover{
+    transform: scale(1.1);
+    font-size: 1.07rem;
+    
+}
+.delete-button-confirm{
+    background-color: rgb(223, 58, 58);
+}
+.delete-button-cancel{
+    background-color: rgb(133, 216, 49);
+}
+
+@media (max-width:700px){
+    .delete-button-grp{
+        flex-direction: row;
+        border-radius: 1rem;
+        width: 100%;
+    }
 }

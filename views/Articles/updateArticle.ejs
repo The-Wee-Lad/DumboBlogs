@@ -2,11 +2,28 @@
 <html lang="en">
 <head>
     <%- include("../partials/head.ejs")%>
-    
+    <link rel="stylesheet" href="/stylesheets/updateArticle.css">
 </head>
 <body>
-    <%- inlclude("../partials/navbar.ejs");%>
-    lol biatch!!
-    <%- include("../partials/footer.ejs");%>
+    <%- include("../partials/navbar.ejs") %>
+    <div class="articleMeta" data-article-id=<%- article._id%>></div>
+    <div class = container>
+        <span class= "heading"> <h1>Update Article</h1> </span>
+        <div class = "message">Messages Here</div>
+        <%- include("../partials/form.ejs") %>
+    </div> 
+    <div class="delete-popup">
+        <div class="delete-container">
+            <div class="delete-message">
+                Are you sure you want to permanently delete this article? This action is irreversible, and all its content will be lost forever.
+            </div>
+            <div class="delete-button-grp">
+                <button class="delete-button-confirm delbtn">Delete</button>
+                <button class="delete-button-cancel delbtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <%- include("../partials/footer.ejs"); %>
+    <script src="/scripts/updateArticle.js" defer></script>
 </body>
 </html>

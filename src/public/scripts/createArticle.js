@@ -1,8 +1,22 @@
+const form = document.forms[0];
+const fromStorage = JSON.parse(sessionStorage.getItem("newArticleData"));
+
+form.title.value = fromStorage?.title ?? "",
+form.description.value = fromStorage?.description ?? "",
+form.markdown.value = fromStorage?.markdown ?? "",
+form.isPublic.checked = fromStorage?.isPublic ?? true;
+
+let formData = {
+    title : form?.title?.value,
+    description : form.description.value,
+    markdown : form.markdown.value,
+    isPublic : form.isPublic.checked,
+};
 const btnPrimary = document.querySelector(".btn-primary");
 btnPrimary.textContent = "Create";
-const maxTitle = 50,
-    maxDescription = 250,
-    maxContent = 10000;
+const maxTitle = 36,
+maxDescription = 250,
+maxContent = 20000;
 const messageDiv = document.querySelector(".message");
 const stateMessage = (error = false,message, reset = false) => {
     messageDiv.style.display = "flex"
@@ -24,9 +38,18 @@ const makeCreateRequest = async (formData) => {
         const response = await axios.post("/api/v1/articles/create",{formData});
         console.log(response);
         stateMessage(false,"Post Created Successfully ....redirecting");
-        setTimeout(() => {
-            window.location.href = "/"
-        }, 1000);
+        await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                console.log("Rest",response.data.data._id);
+                if(formData.isPublic)
+                    window.location.replace(`/api/v1/articles/show/${response.data.data._id}`);
+                else
+                    window.location.replace(`/api/v1/articles/show-pri/${response.data.data._id}`);
+                resolve("Done");
+            }, 1000);
+        })
+        sessionStorage.removeItem("newArticleData");
+        return true;
     } catch (error) {
         if(error.status < 500){
             console.log(error);
@@ -39,14 +62,15 @@ const makeCreateRequest = async (formData) => {
                     if(err.status < 500){
                         console.log("Refresh Token Corrupt Error");
                         stateMessage(true,"Your session expired. Please log in again to continue.");
+                        return false;
                     }else{
                         window.location.href = "/error"
                     }
                 })
             } else{
                 console.log("Access Token Corrupt Error");
-                
-                stateMessage(true,error.response.data.message||error.message);
+                stateMessage(true,(error.response.data.message||error.message) + "Login again");
+                return false;
             }
         }else {
             window.location.href = "/error"
@@ -57,14 +81,7 @@ const makeCreateRequest = async (formData) => {
 const createPost = async (event) => {
     console.log("in createPost");
     stateMessage(null,null,true);
-    const form = document.forms[0];
     
-    const formData = {
-        title : form.title.value,
-        description : form.description.value,
-        markdown : form.markdown.value,
-        isPublic : form.isPublic.checked,
-    };
     
     if(!formData.title || !formData.markdown ||!formData.description){
         stateMessage(true,"All fields are required");
@@ -75,20 +92,35 @@ const createPost = async (event) => {
         stateMessage(true,`Title can't be more than ${maxTitle} charachters`);
         return;
     }
-    if(formData.title.length > maxDescription){
+    if(formData.description.length > maxDescription){
         stateMessage(true,`Title can't be more than ${maxDescription} charachters`);
+        return;
+    }
+    if(formData.markdown.length > maxContent){
+        stateMessage(true,`Content can't be more than ${maxContent}`);
         return;
     }
     console.log("Creating Post");
     stateMessage(false,"Creating Article Post .....");
-    btnPrimary.disabled = true;
-
-    makeCreateRequest(formData);
     
+    btnPrimary.disabled = (await makeCreateRequest(formData));
     
 }
 
-btnPrimary.addEventListener('click',createPost);
-    window.addEventListener('load', () => {
+btnPrimary.addEventListener('click',createPost);  
+window.addEventListener('load', () => {
     document.body.classList.add('loaded');
 });
+
+
+form.addEventListener('input',() => {
+    formData = {
+        title : form.title.value || "",
+        description : form.description.value || "", 
+        markdown : form.markdown.value || "",
+        isPublic : form.isPublic.checked ?? false,
+    };
+    // console.log(formData);
+    sessionStorage.setItem("newArticleData",JSON.stringify(formData));
+    // console.log(sessionStorage.getItem("newArticleData"));
+})

@@ -7,21 +7,21 @@
 <body>
     <%- include("../partials/navbar.ejs");%>
     <div class = "article-data" style="display: none;"
-        data-article="<%-article.isPublic%>"
-        data-article-id="<%= article._id%>"
-        data-author-id="<%= article.author._id%>"
-        data-ispublic=<%-article.isPublic%>
+        data-article="<%-article?.isPublic || undefined%>"
+        data-article-id="<%= article?._id|| undefined%>"
+        data-author-id="<%= article?.author?._id || undefined%>"
+        data-ispublic=<%-article?.isPublic || undefined%>
     ></div>
     <div class="container">
         <div class="message">Message Here</div>
         <div class="title">
-            <%=article.title%>
+            <%=article.title || undefined%>
         </div>
         <div class="author-container">
             <div class="isPublic">Private</div>
             <address class="author">
-                <div class="author-name"><%=article?.author?.fullname || article?.author?.username%></div>
-                <div class="lastUpdatedAt"><%=article.updatedAt.toLocaleString()%></div>
+                <div class="author-name"><%=article?.author?.fullname || article?.author?.username || undefined%></div>
+                <div class="lastUpdatedAt"><%=article?.updatedAt?.toLocaleString()%></div>
             </address>
         </div>
         
@@ -31,7 +31,7 @@
             <div class="btn btn-three">Share</div>
             <a href="#"><div class="btn btn-four">Update</div></a>
         </div>
-        <div class="markdown"><%-article.markdown%></div>
+        <div class="markdown"><%-article?.markdown%></div>
         <div class="share-popup">
             <a target="_blank" class="shareLink">
                 <div class="whatsapp con">
@@ -54,6 +54,6 @@
         </div>
     </div>
     <%- include("../partials/footer.ejs");%>
-    <script src="/scripts/showArticle.js" defer></script>
+    <script src="/scripts/showPrivateArticle.js" defer></script>
 </body>
 </html>
