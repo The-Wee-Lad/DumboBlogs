@@ -158,6 +158,7 @@ async function initialSetup() {
     if(initialArray.length == 0){
         setFetchStatus(3);
     }
+    history.replaceState(null,null,`${window.location.pathname}?page=${target}`);
     console.log("Initial Page filled, scroll works now");
     document.querySelector(".right-pane").addEventListener("scroll",scrollFetch);
 }

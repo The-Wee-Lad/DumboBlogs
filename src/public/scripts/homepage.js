@@ -27,11 +27,15 @@ function createBlogCard(blogObject) {
 
 function renderBlogs(array){
 
-    array.forEach(element => {
-        if(!blogContainer.contains(document.querySelector(`#${element.id}`))){
-            blogContainer.append(element);
-        }
-    });
+    // array.forEach(element => {
+    //     if(blogContainer.contains(document.querySelector(`#${element.id}`))){
+    //         // blogContainer.append(element);
+    //         console.log("duplicate",element);
+            
+    //     }
+    //     console.log("duplicate",element.querySelector(".blog-card").id);
+    // });
+    blogContainer.append(...array);
 }
 
 async function processFetchData(array){
@@ -155,7 +159,8 @@ async function initialSetup() {
         initialArray.push(...temp);
         startPage++;
     }
-
+    // console.log("this is it:",initialArray);
+    
     const proArrray = await processFetchData(initialArray);
     renderBlogs(proArrray);
     setFetchStatus(0);
@@ -163,8 +168,10 @@ async function initialSetup() {
     if(initialArray.length == 0){
         setFetchStatus(3);
     }
-    console.log("Initial Page filled, scroll works now");
+    history.replaceState(null,null,`${window.location.pathname}?page=${target}`);
+    console.log("Initial Page filled, scroll works now....");
     document.querySelector(".right-pane").addEventListener("scroll",scrollFetch);
+    
 }
 
 blogContainer.addEventListener('click',async (event) => {
