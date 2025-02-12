@@ -113,7 +113,6 @@ async function fillPage() {
     console.log("Getting Page Data");
     try {
         console.log("Here");
-        
         const response = await axios.get(`/api/v1/articles/get/${articleId}`);
         const receivedArticle = response.data.data;
         document.querySelector(".title").textContent=receivedArticle.title;
