@@ -24,7 +24,7 @@ app.use(cors({
 app.use(express.json({limit: "100kb"},cacheOptions));
 
 app.use(express.urlencoded({extended : true, limit : "16kb"}));
-app.use(express.static(path.resolve()+"/src/public"));
+app.use(express.static(path.resolve()+"/src/public",cacheOptions));
 app.use(cookieParser());
 
 
@@ -52,8 +52,9 @@ app.get('/about',(req ,res )=> {
 });
 
 app.get('/myBlogs',(req ,res )=> {
-    res.redirect("/api/v1/user/myBlogs");
+    res.redirect("/api/v1/articles/myBlogs");
 });
+
 app.get('/privacyPolicy',(req ,res )=> {
     res.redirect("/api/v1/home/privacyPolicy");
 });

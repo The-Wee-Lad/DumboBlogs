@@ -14,7 +14,7 @@ let formData = {
 };
 const btnPrimary = document.querySelector(".btn-primary");
 btnPrimary.textContent = "Create";
-const maxTitle = 36,
+const maxTitle = 100,
 maxDescription = 250,
 maxContent = 20000;
 const messageDiv = document.querySelector(".message");
@@ -124,3 +124,17 @@ form.addEventListener('input',() => {
     sessionStorage.setItem("newArticleData",JSON.stringify(formData));
     // console.log(sessionStorage.getItem("newArticleData"));
 })
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const textarea = document.getElementById("markdown-editor");
+
+    textarea.addEventListener("focus", function () {
+        setTimeout(() => {
+            window.scrollTo({
+                top: textarea.offsetTop - window.innerHeight / 3, // Adjust position
+                behavior: "smooth"
+            });
+        }, 100); // Delay to allow rendering
+    });
+});

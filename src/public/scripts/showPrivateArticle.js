@@ -149,7 +149,7 @@ async function fillPage() {
                 stateMessage(true, "I am sorry, login again ...redirecting");
                 await new Promise((res, rej) => {
                     setTimeout(() => {
-                        window.location.replace('/api/v1/user/login');
+                        window.location.replace(`/api/v1/user/login?redirect=${window.location.pathname}`);
                         res(done);
                     }, 2000);
                 })

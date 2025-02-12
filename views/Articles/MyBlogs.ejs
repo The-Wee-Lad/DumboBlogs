@@ -2,12 +2,12 @@
 <html lang="en">
 
 <head>
-    <%- include("./partials/head.ejs") %>
-        <link rel="stylesheet" href="/stylesheets/Homepage.css">
+    <%- include("../partials/head.ejs") %>
+        <link rel="stylesheet" href="/stylesheets/MyBlogs.css">
 </head>
 
 <body>
-    <%- include("./partials/navbar.ejs") %>
+    <%- include("../partials/navbar.ejs") %>
         <div class="container">
             <div class="left-pane">
                 <div class="filter">
@@ -40,9 +40,10 @@
                     <div id="selected-tags"></div>
                 </div>
             </div>
-            
             <div class="right-pane">
-                <h1 class="heading">Homepage</h1>
+                <div class="heading">
+                    <h1>My Blogs</h1>
+                </div>
                 <div class = "blogs">
                     <template id="blogTemplate">
                         <div class="blog-card">
@@ -57,16 +58,17 @@
                             </div>
                         </div>
                     </template>
-
                 </div>
+                
+                
             </div>
 
         </div>
         <div class="createButton">
             <img src="/images/feather.png" alt="CreateButton" title="New Post">
         </div>
-        <%- include("./partials/footer.ejs") %>
-            <script src="/scripts/homepage.js" defer></script>
+        <%- include("../partials/footer.ejs") %>
+            <script src="/scripts/MyBlogs.js" defer></script>
 </body>
 
 </html>

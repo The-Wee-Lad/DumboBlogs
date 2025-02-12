@@ -1,4 +1,4 @@
-const maxTitle = 50,
+const maxTitle = 100,
     maxDescription = 250,
     maxContent = 10000;
 window.addEventListener('load', () => {
@@ -38,7 +38,7 @@ const makeUpdateRequest = async (formData) => {
     console.log("Form Data", formData);
     try {
         console.log("Sending Axios request");
-        await axios.patch(`/api/v1/articles/update/${articleId}`, {formData});
+        await axios.patch(`/api/v1/articles/update/${articleId}`,{formData});
         stateMessage(false, "Article Updated. redirecting....");
         await new Promise((res, rej) => {
             setTimeout(() => {
@@ -72,7 +72,7 @@ const makeUpdateRequest = async (formData) => {
             stateMessage(true, "server Error ...redirecting");
             await new Promise((res, rej) => {
                 setTimeout(() => {
-                    window.location.replace('/');
+                    window.location.replace('/error');
                     res("Done");
                 }, 1000);
             });
@@ -136,7 +136,7 @@ const confirmDeleteHandler = async (event) => {
         }, 1000);
         await new Promise((resolve, reject) => {
             setTimeout(() => {
-                window.location.replace('/');
+                window.location.replace('/api/v1/articles/myBlogs');
             },  3000);
         })
     } catch (error) {
@@ -151,8 +151,8 @@ const confirmDeleteHandler = async (event) => {
                     if (err.status < 500) {
                         console.log("[Delete] Refresh Token Corrupt Error");
                         stateMessage(true, "Your session expired. Please log in again to continue.");
-                        // window.location.replace("/");
-                        // return false;
+                        window.location.replace(`/api/v1/user/login?redirect=${window.location.pathname}`);
+                        return false;
                     } else {
                         window.location.href = "/error"
                     }
@@ -160,8 +160,8 @@ const confirmDeleteHandler = async (event) => {
             } else {
                 console.log("[Delete] Access Token Corrupt Error");
                 stateMessage(true, (error.response.data.message || error.data) + "Login again");
-                // window.location.replace("/");
-                // return false;
+                window.location.replace("/");
+                return false;
             }
         } else {
             window.location.href = "/error"

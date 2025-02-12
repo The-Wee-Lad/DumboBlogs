@@ -43,6 +43,7 @@ input, textarea {
     border-radius: 4px; 
     box-sizing: border-box; 
     transition: border-color 0.3s ease, box-shadow 0.3s ease; 
+    
 }
 
 input:focus, textarea:focus {
@@ -54,7 +55,8 @@ input:focus, textarea:focus {
 textarea{
     height: auto;
     resize: none;
-    overflow-y: hidden;
+    overflow-y: auto;
+    max-height: 200vh;
 }
 
 
@@ -120,7 +122,7 @@ button {
     justify-content: left;
     align-items: center;
     gap: 10px;
-    position: sticky;
+    position: relative;
     bottom: 5px;
     left: 0px;
 }

@@ -178,7 +178,7 @@
     flex-direction: column;
     gap: 8px;
     font-family: Arial, sans-serif;
-    border-left: #daa33b 1rem solid;
+    border-left: turquoise 1rem solid;
     word-break: break-word;
     transition: all 0.3s ease;
 }
@@ -241,17 +241,16 @@
 .heading{
     position: sticky;
     inset:0px;
-    background-color: #daa33b;
+    background-color: #85d7be;
     width: 100%;
     text-align: center;
     padding: 1rem;
     margin: 10px;
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
     border-radius: 1rem;
-    color: azure;
 }
-
-/* .right-pane::-webkit-scrollbar {
+/* 
+.right-pane::-webkit-scrollbar {
     display: none;
 } */
 

@@ -1,4 +1,4 @@
-let isFetching = 0;
+let isFetching = 1;
 console.log("My Blogs");
 document.querySelector(".createButton").addEventListener("click",toCreatePage);
 const blogTemplate = document.querySelector("#blogTemplate").content;
@@ -26,12 +26,7 @@ function createBlogCard(blogObject) {
 }
 
 function renderBlogs(array){
-
-    array.forEach(element => {
-        if(!blogContainer.contains(document.querySelector(`#${element.id}`))){
-            blogContainer.append(element);
-        }
-    });
+    blogContainer.append(...array);
 }
 
 async function processFetchData(array){
@@ -54,11 +49,11 @@ async function processFetchData(array){
 
 async function fetchBlogs(nextPage){
     try {
-        const response = await axios.get(`/api/v1/articles/fetchBlogs?page=${nextPage}`);
+        const response = await axios.get(`/api/v1/articles/fetchMyBlogs?page=${nextPage}`);
         const blogs = response.data.data;
         return blogs;
     } catch (error) {
-        console.log("Blogs fEtch wrror : ",error);
+        console.log("My Blogs fEtch wrror : ",error);
         if(error.response.data.code == 709){
             try {
                 console.log("Refreshing Access Token in fetch my blogs");
@@ -133,7 +128,7 @@ document.querySelector(".right-pane").addEventListener("scroll",(event) => {
 
 const scrollFetch = async (event) => {
     const obj = event.target;;
-    if(obj.scrollTop+obj.offsetHeight+100 >= obj.scrollHeight){
+    if(obj.scrollTop+obj.offsetHeight == obj.scrollHeight){
         console.log("Not Right Now");
         if(isFetching != 1){
             moreBlogs();
@@ -172,7 +167,7 @@ blogContainer.addEventListener('click',async (event) => {
     if(clickedBlogCard.className == "blog-card"){
         const articleId = clickedBlogCard.id;
         blogContainer.disabled = true;
-        window.location.href = `/api/v1/articles/show/${articleId}`;
+        window.location.href = `/api/v1/articles/show-pri/${articleId}`;
     }
 })
 

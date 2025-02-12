@@ -1,6 +1,7 @@
 const logButton = document.querySelector('.login');
 const signUpButton = document.querySelector('.signup');
 const currentLocation = encodeURIComponent(window.location.pathname);
+const myblogs = document.querySelector(".myblogs");
 // console.log(logButton);
 
 
@@ -103,8 +104,9 @@ const setUpNavBar = async ()=>{
         logButton.textContent = "Logout";
         logButton.style.backgroundColor = "#f48989";
         signUpButton.style.backgroundColor = "aquamarine";
-        signUpButton.textContent = "Accounts";
+        signUpButton.textContent = "Account";
         signUpButton.href = "/";
+        myblogs.style.display="flex";
     } else {
         logButton.removeEventListener('click',logoutHandler);
         logButton.href = `/api/v1/user/login?redirect=${currentLocation}`;
@@ -113,6 +115,7 @@ const setUpNavBar = async ()=>{
         signUpButton.style.backgroundColor = "#324b9e";
         signUpButton.textContent = "SignUp";
         signUpButton.href = "/api/v1/user/register";
+        myblogs.style.display="none";
     }
 };
 
@@ -127,3 +130,30 @@ window.addEventListener("pageshow",(event) => {
     if((window.location.href).split("/").splice(-1,1) != "error")
         setUpNavBar();
 });
+
+
+const toCreatePage = async (event) => {
+    console.log("Creating Page request");
+    const response = await axios.get('/api/v1/user/isUserLoggedIn')
+    .then((res)=>{
+            console.log("going to create page",res);
+            window.location.href = "/api/v1/articles/create";
+        })
+    .catch((err)=>{
+        console.log(err);
+        if(err.response.data.code == 709){
+            axios.post("/api/v1/user/refreshAccessToken")
+            .then(()=>{toCreatePage();})
+            .catch((err)=>{ 
+                console.log("this is done");
+                window.location.href = "/api/v1/user/login?redirect=/api/v1/articles/create";
+            });
+        }else{
+            window.location.href = "/api/v1/user/login?redirect=/api/v1/articles/create";
+        }
+        console.log("Slipped to the end");
+    })
+}
+
+document.querySelector(".newBlog").addEventListener("click",toCreatePage);
+document.querySelector(".newBlog").addEventListener("touchstart",toCreatePage);
