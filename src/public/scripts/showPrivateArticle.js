@@ -38,9 +38,6 @@ const timedMessage = async (error, message, reset) => {
 }
 
 
-
-console.log(loginStatus);
-
 const showSharePopup = (event) => {
     if (sharePopup.style.display == "flex") {
         sharePopup.style.display = "none";
@@ -115,12 +112,15 @@ document.addEventListener("click", (event) => {
 async function fillPage() {
     console.log("Getting Page Data");
     try {
+        console.log("Here");
+        
         const response = await axios.get(`/api/v1/articles/get/${articleId}`);
         const receivedArticle = response.data.data;
         document.querySelector(".title").textContent=receivedArticle.title;
         document.querySelector(".author-name").textContent=receivedArticle.author.fullname || receivedArticle.author.username;
         document.querySelector(".lastUpdatedAt").textContent=receivedArticle.updatedAt.toLocaleString();
         document.querySelector(".markdown").innerHTML=receivedArticle.markdown;
+        console.log("THis is the markdown :" ,receivedArticle.markdown);
         
         articleMeta.dataset.ispublic = receivedArticle.isPublic;
         articleMeta.dataset.articleId = articleId;
