@@ -120,7 +120,7 @@ async function fillPage() {
         document.querySelector(".title").textContent=receivedArticle.title;
         document.querySelector(".author-name").textContent=receivedArticle.author.fullname || receivedArticle.author.username;
         document.querySelector(".lastUpdatedAt").textContent=receivedArticle.updatedAt.toLocaleString();
-        document.querySelector(".markdown").textContent=receivedArticle.markdown;
+        document.querySelector(".markdown").innerHTML=receivedArticle.markdown;
         
         articleMeta.dataset.ispublic = receivedArticle.isPublic;
         articleMeta.dataset.articleId = articleId;
