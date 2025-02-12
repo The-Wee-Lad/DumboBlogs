@@ -148,22 +148,28 @@ const scrollFetch = async (event) => {
 async function initialSetup() {
     const target = (new URLSearchParams(window.location.search).get("page")||1);
     const initialArray = [];
-    setFetchStatus(1);
+    let intermediateArray = [];
+    // setFetchStatus(1);
     while(startPage<=target){
+        setFetchStatus(1);
         let temp = await fetchBlogs(startPage);
-        
+        intermediateArray = [];
         if(temp.length == 0){
             setFetchStatus(-1);
             break;
         }
+        intermediateArray.push(...temp);
         initialArray.push(...temp);
+        intermediateArray = await processFetchData(intermediateArray);
+        renderBlogs(intermediateArray);
         startPage++;
+        setFetchStatus(0);
     }
     // console.log("this is it:",initialArray);
     
-    const proArrray = await processFetchData(initialArray);
-    renderBlogs(proArrray);
-    setFetchStatus(0);
+    // const proArrray = await processFetchData(initialArray);
+    // renderBlogs(proArrray);
+    // setFetchStatus(0);
     
     if(initialArray.length == 0){
         setFetchStatus(3);
