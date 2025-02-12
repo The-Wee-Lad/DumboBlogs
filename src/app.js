@@ -7,9 +7,9 @@ import path from "path";
 const app = express();
 
 const cacheOptions = {
-    // immutable:true,
-    // maxAge:"1d",
-    // etag:true,
+    immutable:true,
+    maxAge:"1d",
+    etag:true,
 }
 
 app.set('view engine','ejs');
