@@ -7,7 +7,7 @@ import createDOMpurify from "dompurify";
 import markdownit from 'markdown-it'
 
 const createShow = asyncHandler(async (req, res) => {
-    res.render("./Articles/CreateArticle", {
+    res.render("./Articles/createArticle", {
         title: "New Article",
         article: new Articles(),
     });
