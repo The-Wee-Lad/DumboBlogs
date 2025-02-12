@@ -65,14 +65,14 @@ let updateBtnHandler = async () => {
     window.location.replace(`/api/v1/articles/update/${articleId}`);
 }
 
-const shareContent = document.querySelector(".title").textContent;
+const shareContent = document.querySelector(".title").textContent.trim();
 const setInitialState = async () => {
     const response =  (await checkLogin());
     loginStatus = response?.loginStatus;
     const user = response?.user;
-    shareLink[0].href=`https://api.whatsapp.com/send?text=Hey! Check This Out : ${shareContent} : ${window.location.href}`;
+    shareLink[0].href=`https://api.whatsapp.com/send?text=${shareContent} : ${window.location.href}`;
     shareLink[1].href=`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`;
-    shareLink[2].href=`https://twitter.com/intent/tweet?url=${window.location.href}&text=Hey Check This Out : ${shareContent}`;
+    shareLink[2].href=`https://twitter.com/intent/tweet?url=${window.location.href}&text=${shareContent}`;
     
     if(loginStatus == true){
         // console.log("user",user);

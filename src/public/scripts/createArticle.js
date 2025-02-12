@@ -16,7 +16,7 @@ const btnPrimary = document.querySelector(".btn-primary");
 btnPrimary.textContent = "Create";
 const maxTitle = 100,
 maxDescription = 250,
-maxContent = 20000;
+maxContent = 40000;
 const messageDiv = document.querySelector(".message");
 const stateMessage = (error = false,message, reset = false) => {
     messageDiv.style.display = "flex"

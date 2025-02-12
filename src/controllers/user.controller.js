@@ -4,8 +4,8 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
 
 const cookieOptions = {
-    httpOnly:false,
-    secure:false,
+    httpOnly:true,
+    secure:true,
 }
 
 const generateAccessAndRefreshToken = async(userid) => {
