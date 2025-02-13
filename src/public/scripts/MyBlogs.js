@@ -128,7 +128,7 @@ document.querySelector(".right-pane").addEventListener("scroll",(event) => {
 
 const scrollFetch = async (event) => {
     const obj = event.target;;
-    if(obj.scrollTop+obj.offsetHeight == obj.scrollHeight){
+    if(obj.scrollTop+obj.offsetHeight+100 >= obj.scrollHeight){
         console.log("Not Right Now");
         if(isFetching != 1){
             moreBlogs();
