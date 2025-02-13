@@ -1,0 +1,165 @@
+/* Container */
+.container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Wrapper */
+.wrapper {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 450px;
+    width: 100%;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Message */
+.message {
+    text-align: center;
+    color: #d9534f;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.text-heading {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.text-heading h1 {
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #333;
+    letter-spacing: 0.1rem;
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #444;
+}
+
+input {
+    padding: 0.625rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Button Group */
+.button-grp {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    gap: 10px;
+}
+
+button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.saveInfo, #changePass {
+    background: #007bff;
+    color: white;
+}
+
+.saveInfo:hover, #changePass:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+}
+
+.saveInfo:disabled{
+    background: #bac2cc;
+    background: #bac2cc;
+    transform: scale(1);
+}
+
+#changePass:disabled{
+    background: #bac2cc;
+    background: #bac2cc;
+    transform: scale(1);
+}
+/* .saveInfo:hover:disabled{
+    background: #bac2cc;
+    transform: scale(1);
+} */
+
+
+#resetInfo, #resetPass {
+    background: #dc3545;
+    color: white;
+}
+
+#resetInfo:hover, #resetPass:hover {
+    background: #a71d2a;
+    transform: scale(1.05);
+
+}
+
+.message1 {
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 6px;
+    display: none;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 500;
+}
+.message2 {
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 6px;
+    display: none;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .wrapper {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .text-heading h1 {
+        font-size: 20px;
+    }
+
+    .button-grp {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

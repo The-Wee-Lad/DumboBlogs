@@ -1,6 +1,7 @@
 import { Users } from "../models/users.model.js";
 import { ApiResponse } from "../utils/ApiResponse.utils.js"
 import { asyncHandler } from "../utils/asyncHandler.js";
+import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
 const cookieOptions = {
@@ -23,6 +24,7 @@ const generateAccessAndRefreshToken = async(userid) => {
 };
 
 const refreshAccessToken = asyncHandler(async(req, res) => {
+    console.log("Refreshing The Token");
     try {
         const receivedRefreshToken = req.cookies.refreshToken || req.body.refreshToken ;
         let decodedRefreshToken;
@@ -148,6 +150,71 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, req?.user, "User Fetched!!", 200));
 });
 
+const updateUser = asyncHandler(async (req,res) => {
+    const {username,email,fullname} = req.body;
+    if(!username || !email){
+        res.status(400).json(new ApiResponse(400,{},"Invalid Input",730));
+        throw new Error("Invalid User Info. Can't Update");
+        
+    }
+    // console.log("recieved data ",username,email,fullname);
+    
+    const existingUsername = await Users.aggregate([
+        {
+            $match:{
+                username:username,
+                _id:{$ne:new mongoose.Types.ObjectId(req?.user?._id)}
+            }
+        }
+    ]);
+    const existingEmail = await Users.aggregate([
+        {
+            $match:{
+                email:email,
+                _id:{$ne:new mongoose.Types.ObjectId(req?.user?._id)}
+            }
+        }
+    ]);
+    // console.log(existingUsername,existingEmail);
+    if(existingUsername.length!=0){
+        res.status(409).json(new ApiResponse(409,{},"Username Allready in use",731));
+        throw new Error("Username Already in Use. Can't Update");
+    }
+    if(existingEmail.length!=0){
+        res.status(409).json(new ApiResponse(409,{},"Email Allready in use",732));
+        throw new Error("Email Already in Use. Can't Update");
+    }
+
+    const newUser=await Users.findByIdAndUpdate(req?.user?._id,{
+        $set:{
+            username:username,
+            fullname:fullname,
+            email:email
+        }
+    }).select("-password -refreshToken");
+
+    res.status(200).json(new ApiResponse(200,newUser,"User Updated",200));
+});
+
+const updatePassword = asyncHandler(async(req, res) => {
+    const user = await Users.findById(req?.user?._id);
+    const {oldPassword, newPassword} = req.body;
+    console.log(oldPassword,newPassword);
+    
+    // console.log((await user.isPasswordCorrect(oldPassword)));
+    
+    if(!(await user.isPasswordCorrect(oldPassword))){
+        // console.log("Password Doesn't Work");
+        
+        res.status(409).json(new ApiResponse(407,{},"Invalid Old Password",733));
+        throw new Error("Invalid Old Password");
+    }
+
+    user.password = newPassword;
+    await user.save();
+    res.status(200).json(new ApiResponse(200,{},"Password Changed",200));
+});
+
 export {
     refreshAccessToken,
     generateAccessAndRefreshToken,
@@ -155,5 +222,7 @@ export {
     loginUser,
     logoutUser,
     getCurrentUser,
-    cookieOptions
+    cookieOptions,
+    updatePassword,
+    updateUser
 }

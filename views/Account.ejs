@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("./partials/head.ejs") %>
+        <link rel="stylesheet" href="/stylesheets/Accounts.css">
+</head>
+
+<body>
+    <%- include("./partials/navbar.ejs") %>
+        <div class="container" style="min-height: 100vh;">
+            <div class="wrapper">
+                <div class="message1"></div>
+                <div class="form-group a">
+                    <div class="text-heading a">
+                        <h1>Account Info</h1>
+                    </div>
+                    <form class="info" action="post">
+                        <label for="fullname">Fullname</label>
+                        <input type="text" name="fullname" id="fullname" placeholder="Your fullname here">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" id="username" placeholder="Your username">
+                        <label for="email">Email</label>
+                        <input type="text" name="email" id="email" placeholder="Your email">
+                        <div class="button-grp a">
+                            <button type="button" class="saveInfo" id="saveInfo">Save Info</button>
+                            <button type="button" name="resetInfo" id="resetInfo">Reset</button>
+                        </div>
+                    </form>
+                </div>
+                <hr></hr>
+                <div class="message2"></div>
+                <div class="form-group b">
+                    <div class="text-heading"><h1>Password</h1></div>
+                    <form class="password" action="post">
+                        <label for="oldPass">Old Password</label>
+                        <input type="password" name="oldPass" id="oldPass">
+                        <label for="newPass">New Password</label>
+                        <input type="password" name="newPass" id="newPass">
+                        <label for="confPass">Confirm Password</label>
+                        <input type="password" name="confPass" id="confPass">
+                        <div class="button-grp b">
+                            <button type="button" name="changePass" id="changePass">Change</button>
+                            <button type="button" name="resetPass" id="resetPass">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <%- include("./partials/footer.ejs") %>
+        <script src="/scripts/Account.js" defer></script>
+</body>
+
+</html>

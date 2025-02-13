@@ -75,8 +75,7 @@ const logoutHandler = async (event) => {
                         sessionStorage.clear();
                         window.location.reload();
                     }else {
-                        console.log("Catastrophic Error Occurred");
-                        // throw error
+                        console.log("Catastrophic Error Occurred",err);
                         window.location.href = "/error";
                     }
                 });
@@ -85,7 +84,7 @@ const logoutHandler = async (event) => {
                 sessionStorage.clear();
                 console.log("Error ",error);
                 // window.location.reload();
-                // window.location.href = "/";
+                window.location.href = "/";
             }
         } else{
             console.log("Outside");
@@ -105,7 +104,7 @@ const setUpNavBar = async ()=>{
         logButton.style.backgroundColor = "#f48989";
         signUpButton.style.backgroundColor = "aquamarine";
         signUpButton.textContent = "Account";
-        signUpButton.href = "/";
+        signUpButton.href = "/api/v1/user/accounts";
         myblogs.style.display="flex";
     } else {
         logButton.removeEventListener('click',logoutHandler);

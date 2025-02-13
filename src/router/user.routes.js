@@ -4,7 +4,9 @@ import {
     refreshAccessToken, 
     loginUser, 
     logoutUser,
-    getCurrentUser
+    getCurrentUser,
+    updatePassword,
+    updateUser
 } from "../controllers/user.controller.js"
 import { verifyJWT } from "../middlewares/auth.middlewares.js";
 
@@ -35,10 +37,20 @@ router.route('/login')
 router.route('/isUserLoggedIn')
 .get(verifyJWT,getCurrentUser);
 
+router.route('/getCurrentUser')
+.get(verifyJWT,getCurrentUser);
+
 router.route("/refreshAccessToken")
 .post(refreshAccessToken);
 
 router.route("/logout")
 .get(verifyJWT,logoutUser);
+
+router.route("/accounts")
+.get((req,res)=>{
+    res.status(200).render("Account",{title:"User"});
+})
+router.route("/accounts/updateUser").post(verifyJWT,updateUser);
+router.route("/accounts/updatePassword").post(verifyJWT,updatePassword);
 
 export default router;

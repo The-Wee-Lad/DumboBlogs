@@ -143,7 +143,7 @@ async function initialSetup() {
     while(startPage<=target){
         let temp = await fetchBlogs(startPage);
         
-        if(temp.length == 0){
+        if(temp?.length == 0 || !temp){
             setFetchStatus(-1);
             break;
         }
