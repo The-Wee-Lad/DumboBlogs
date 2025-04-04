@@ -30,7 +30,7 @@ const login = async (event) => {
         stateMessage(true, "All Fields are Required!!");
         return;
     }
-    stateMessage(false, "Logging In.....", true);
+    stateMessage(false, "Logging In.....");
     try {
         const response = await axios.post("/api/v1/user/login", formData);
         stateMessage(false, response.data.message + "....redirecting")
