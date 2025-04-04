@@ -59,7 +59,7 @@ To set up the project locally:
 
 DumboBlogs is deployed and accessible at:
 
-**[Live Demo](<DEPLOYMENT_LINK_HERE>)**
+**[Live Demo](dumboblogs.onrender.com)**
 
 To deploy your own instance:
 
